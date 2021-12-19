@@ -50,15 +50,6 @@ fn parse_boards(
     return incidence_mat;
 }
 
-// fn check_winner<S, D>(coord: &Coord, boards: &ArrayBase<S, D>) -> bool
-// where
-//   S: DataOwned,
-//   D: Dimension
-//  {
-//   let cur_board = boards.slice(s![coord.0, .., ..]);
-//   return cur_board.row(coord.1).iter().sum() == W || cur_board.column(coord.2).iter().sum() == H
-// }
-
 fn main() {
     // Read input
     let filename: String = env::args().into_iter().nth(1).unwrap();
@@ -111,8 +102,6 @@ fn main() {
             None => println!("No coordinates found for {:?}", num),
         }
     }
-    // println!("no winner found!");
-    // std::process::exit(1);
 }
 
 fn compute_winning_val(
@@ -121,8 +110,6 @@ fn compute_winning_val(
     coord: &Coord,
     num: i64,
 ) -> i64 {
-    // let masked_board_vals = boards.slice(s![coord.0, .., ..]) * boards.slice(s![coord.0, .., ..]);
-    // println!("{:?}", masked_board_vals);
     let mask = boards.index_axis_mut(Axis(0), coord.0);
     let board_val = board_vals.index_axis_mut(Axis(0), coord.0);
     println!("mask {:?}", mask);

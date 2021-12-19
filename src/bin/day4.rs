@@ -75,30 +75,44 @@ fn main() {
     let mut board_vals = Array::<i32, Ix3>::zeros((num_boards, H, W).f());
     let incidence_mat = parse_boards(&lines[2..], &mut board_vals);
 
-    // println!("incidence Mat: {:?}", incidence_mat);
-    // println!("incidence Mat: {:?}", &boards * &board_vals);
+    let mut board_completed = vec![false; num_boards];
+    let mut has_any_board_completed = false;
 
     for (num_draw, num) in draw_numbers.iter().enumerate() {
         match incidence_mat.get(&num) {
             Some(coords) => {
                 for coord in coords {
+                    if board_completed[coord.0] {
+                        continue;
+                    }
                     boards[[coord.0, coord.1, coord.2]] = 0;
                     let cur_board = boards.slice(s![coord.0, .., ..]);
                     if cur_board.row(coord.1).iter().sum::<i32>() == (0 as i32)
                         || cur_board.column(coord.2).iter().sum::<i32>() == (0 as i32)
                     {
-                        let winning_val = compute_winning_val(&mut boards, &mut board_vals, &coord, *num as i64);
-                        println!("winner found on {}th draw with value {}: {:?}, {:?}", num_draw, num, coord, winning_val);
-                        std::process::exit(0);
+                        board_completed[coord.0] = true;
+                        let winning_val =
+                            compute_winning_val(&mut boards, &mut board_vals, &coord, *num as i64);
+                        if has_any_board_completed {
+                            println!(
+                                "completed on {}th draw with value {}: {:?}, {:?}",
+                                num_draw, num, coord, winning_val
+                            );
+                        } else {
+                            println!(
+                                "**** winner found on {}th draw with value {}: {:?}, {:?}",
+                                num_draw, num, coord, winning_val
+                            );
+                            has_any_board_completed = true;
+                        }
                     }
-                    // check_winner(coord, &boards);
                 }
             }
             None => println!("No coordinates found for {:?}", num),
         }
     }
-    println!("no winner found!");
-    std::process::exit(1);
+    // println!("no winner found!");
+    // std::process::exit(1);
 }
 
 fn compute_winning_val(
@@ -107,15 +121,15 @@ fn compute_winning_val(
     coord: &Coord,
     num: i64,
 ) -> i64 {
-  // let masked_board_vals = boards.slice(s![coord.0, .., ..]) * boards.slice(s![coord.0, .., ..]);
-  // println!("{:?}", masked_board_vals);
-  let mask = boards.index_axis_mut(Axis(0), coord.0);
-  let board_val = board_vals.index_axis_mut(Axis(0), coord.0);
-  println!("mask {:?}", mask);
-  println!("board_val {:?}", board_val);
-  
-  let masked = &mask * &board_val;
-  let sum = masked.sum();
-  println!("masked {:?}, sum {:?}, num {}", masked, sum, num);
-  return (sum as i64) * num;
+    // let masked_board_vals = boards.slice(s![coord.0, .., ..]) * boards.slice(s![coord.0, .., ..]);
+    // println!("{:?}", masked_board_vals);
+    let mask = boards.index_axis_mut(Axis(0), coord.0);
+    let board_val = board_vals.index_axis_mut(Axis(0), coord.0);
+    println!("mask {:?}", mask);
+    println!("board_val {:?}", board_val);
+
+    let masked = &mask * &board_val;
+    let sum = masked.sum();
+    println!("masked {:?}, sum {:?}, num {}", masked, sum, num);
+    return (sum as i64) * num;
 }

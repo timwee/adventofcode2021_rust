@@ -19,4 +19,12 @@ fn main() {
 
     let m = median(&mut positions);
     println!("median {}, total gas: {}", m, positions.iter().map(|pos| (pos - m).abs()).sum::<i64>());
+
+    // part 2
+    let min = *positions.iter().min().unwrap();
+    let max = *positions.iter().max().unwrap();
+    let sum_n = |n: i64| n * (n + 1) / 2; 
+    let total_dist = |x: i64| positions.iter().map(|x2: &i64| sum_n((x2 - x).abs()) ).sum::<i64>();
+    let total_dist_to_other: i64 = (min .. max + 1).map(total_dist).min().unwrap();
+    println!("part2 min total dist {}", total_dist_to_other);
 } 

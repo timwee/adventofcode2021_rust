@@ -1,3 +1,7 @@
+// https://www.reddit.com/r/adventofcode/comments/rbj87a/2021_day_8_solutions/
+// https://github.com/simonbrahan/aoc2021/blob/master/08/part2.py (elegant)
+// spreadsheet: https://docs.google.com/spreadsheets/d/1fvRZXzvsaElaGUtX3GGSjXqCjE9xaOmXQgs1YN0oHqU/edit#gid=2031070698
+
 /**
  * // https://adventofcode.com/2021/day/8
 

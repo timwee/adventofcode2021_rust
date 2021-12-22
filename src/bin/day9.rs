@@ -5,14 +5,14 @@ use std::io::{self, BufRead};
 extern crate lazy_static;
 
 lazy_static! {
-    static ref DELTA_XYs: Vec<(i32, i32)> = vec![(-1, 0), (1, 0), (0, 1), (0, -1)];
+    static ref DELTA_XY: Vec<(i32, i32)> = vec![(-1, 0), (1, 0), (0, 1), (0, -1)];
 }
 
 #[derive(Default, Debug)]
 struct Coord(usize, usize);
 
 fn neighbors(cur_x: usize, cur_y: usize, rows: i32, cols: i32) -> Vec<(usize, usize)> {
-    let coords = DELTA_XYs.iter().map(|(dx, dy)| {
+    let coords = DELTA_XY.iter().map(|(dx, dy)| {
         return ((cur_x as i32) + dx, (cur_y as i32) + dy);
     });
     return coords
